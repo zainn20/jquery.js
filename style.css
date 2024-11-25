@@ -1,0 +1,119 @@
+
+
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #e6f2f5; /* Warna latar belakang yang lembut */
+        text-align: center;
+        color: #333;
+    }
+    
+    .container {
+        width: 80%;
+        max-width: 700px;
+        margin: 20px auto;
+        background: #ffffff;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); /* Bayangan lembut */
+        
+    }
+
+    
+    h2 {
+        color: #0077b6; /* Warna utama untuk judul */
+        font-size: 2rem;
+        margin-bottom: 20px;
+    }
+    
+    input[type="text"], input[type="number"] {
+        width: 100%; /* Menjadikan semua input memiliki lebar penuh */
+        padding: 10px;
+        margin: 8px 0;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-sizing: border-box; /* Mengatur box-sizing agar padding tidak mempengaruhi lebar */
+        
+    }
+    
+    button {
+        padding: 10px 20px;
+        color: white;
+        background-color: #0077b6; /* Sesuaikan dengan warna pilihan Anda */
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: bold;
+    }
+    
+    button:hover {
+        background-color: #005f8e;
+        transform: translateY(-2px);
+    }
+    
+    
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+    
+    th, td {
+        padding: 15px;
+        border-bottom: 1px solid #e0e0e0;
+        text-align: center;
+        font-size: 1rem;
+        color: #333;
+    }
+    
+    th {
+        background-color: #0077b6; /* Warna utama untuk header tabel */
+        color: white;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    
+    td {
+        background-color: #f9fafb; /* Warna latar belakang baris */
+    }
+    
+    button {
+        padding: 8px 12px;
+        color: white;
+        background-color: #0077b6; /* Warna utama tombol */
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        font-weight: bold;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+    
+    
+    button:active {
+        transform: translateY(1px);
+    }
+    
+    button + button {
+        margin-left: 8px;
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 600px) {
+        .container {
+            padding: 20px;
+        }
+    
+        h2 {
+            font-size: 1.5rem;
+        }
+    
+        th, td {
+            padding: 10px;
+            font-size: 0.9rem;
+        }
+    }
+    
+    

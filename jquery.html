@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+    <title>Data Karyawan Divisi IT</title>
+</head>
+<body>
+    <div class="container">
+        <h2>Data Karyawan</h2>
+        <input type="text" id="searchDivisi" placeholder="Cari berdasarkan divisi">
+        <table>
+            <thead>
+                <tr>
+                    <th>Nama</th>
+                    <th>Usia</th>
+                    <th>Divisi</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody id="karyawanTable"></tbody>
+        </table>
+        <form id="karyawanForm">
+            <h3 id="formTitle">Tambah Karyawan</h3>
+            <input type="text" id="nama" placeholder="Nama" required>
+            <input type="number" id="usia" placeholder="Usia" required>
+            <input type="text" id="divisi" placeholder="Divisi" required>
+            <button type="submit">Simpan</button>
+            <button type="button" id="cancelEdit" style="display: none;">Batal</button>
+        </form>
+    </div>
+
+    <script>
+        class KaryawanApp {
+            constructor() {
+                this.karyawan = JSON.parse(localStorage.getItem("karyawanData")) || [
+                    { nama: "Andi", usia: 30, divisi: "IT" },
+                    { nama: "Budi", usia: 25, divisi: "HR" },
+                    { nama: "Cici", usia: 28, divisi: "IT" },
+                    { nama: "Dewi", usia: 32, divisi: "Marketing" },
+                    { nama: "Eka", usia: 35, divisi: "Finance" }
+                ];
+                this.isEditing = false;
+                this.editIndex = null;
+
+                this.init();
+            }
+
+            init() {
+                this.renderTable(this.karyawan);
+                this.bindEvents();
+            }
+
+            saveToLocalStorage() {
+                localStorage.setItem("karyawanData", JSON.stringify(this.karyawan));
+            }
+
+            renderTable(data) {
+                const $karyawanTable = $("#karyawanTable");
+                $karyawanTable.empty();
+
+                data.forEach((item, index) => {
+                    const $row = $(`
+                        <tr>
+                            <td>${item.nama}</td>
+                            <td>${item.usia}</td>
+                            <td>${item.divisi}</td>
+                            <td>
+                                <button class="editBtn" data-index="${index}">Edit</button>
+                                <button class="deleteBtn" data-index="${index}">Hapus</button>
+                            </td>
+                        </tr>
+                    `);
+                    $karyawanTable.append($row);
+                });
+            }
+
+            bindEvents() {
+                $("#karyawanForm").on("submit", (e) => this.handleSubmit(e));
+                $("#cancelEdit").on("click", () => this.cancelEdit());
+                $("#searchDivisi").on("input", (e) => this.filterByDivisi(e));
+                $("#karyawanTable").on("click", ".editBtn", (e) => this.startEdit($(e.target).data("index")));
+                $("#karyawanTable").on("click", ".deleteBtn", (e) => this.deleteKaryawan($(e.target).data("index")));
+            }
+
+            handleSubmit(e) {
+                e.preventDefault();
+                const nama = $("#nama").val();
+                const usia = parseInt($("#usia").val());
+                const divisi = $("#divisi").val();
+
+                if (this.isEditing) {
+                    this.karyawan[this.editIndex] = { nama, usia, divisi };
+                    this.isEditing = false;
+                    this.editIndex = null;
+                    $("#formTitle").text("Tambah Karyawan");
+                    $("#cancelEdit").hide();
+                } else {
+                    this.karyawan.push({ nama, usia, divisi });
+                }
+
+                this.saveToLocalStorage();
+                this.renderTable(this.karyawan);
+                $("#karyawanForm")[0].reset();
+            }
+
+            startEdit(index) {
+                const karyawanToEdit = this.karyawan[index];
+                $("#nama").val(karyawanToEdit.nama);
+                $("#usia").val(karyawanToEdit.usia);
+                $("#divisi").val(karyawanToEdit.divisi);
+                this.isEditing = true;
+                this.editIndex = index;
+                $("#formTitle").text("Edit Karyawan");
+                $("#cancelEdit").show();
+            }
+
+            cancelEdit() {
+                this.isEditing = false;
+                this.editIndex = null;
+                $("#karyawanForm")[0].reset();
+                $("#formTitle").text("Tambah Karyawan");
+                $("#cancelEdit").hide();
+            }
+
+            deleteKaryawan(index) {
+                this.karyawan.splice(index, 1);
+                this.saveToLocalStorage();
+                this.renderTable(this.karyawan);
+            }
+
+            filterByDivisi(e) {
+                const searchDivisi = e.target.value.toLowerCase();
+                const filteredData = this.karyawan.filter(item =>
+                    item.divisi.toLowerCase().includes(searchDivisi)
+                );
+                this.renderTable(filteredData);
+            }
+        }
+
+        $(document).ready(() => {
+            new KaryawanApp();
+        });
+    </script>
+</body>
+</html>
